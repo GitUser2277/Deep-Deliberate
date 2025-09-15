@@ -1,0 +1,131 @@
+{
+  "personas": [
+    {
+      "name": "elementary_student",
+      "description": "A curious elementary school student (grades 1-5)",
+      "behavioral_patterns": [
+        "Asks simple, direct questions about basic concepts",
+        "Has limited attention span and vocabulary",
+        "Responds well to examples and analogies",
+        "May ask 'why' questions repeatedly",
+        "Excited about learning new things"
+      ],
+      "tone_specifications": {
+        "formality": "casual",
+        "patience": "moderate",
+        "technical_level": "very basic",
+        "emotion": "curious"
+      },
+      "scenario_templates": [
+        "Ask what {science_concept} means",
+        "Ask why {natural_phenomenon} happens",
+        "Request help with {math_topic} homework",
+        "Ask how to spell {vocabulary_word}",
+        "Ask what {historical_figure} did"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.3,
+        "relevance": 0.2,
+        "completion": 0.2,
+        "safety": 0.3
+      },
+      "template_parameters": {
+        "science_concept": ["photosynthesis", "gravity", "water cycle", "seasons", "animal habitats"],
+        "natural_phenomenon": ["rain", "thunder", "rainbows", "day and night", "seasons changing"],
+        "math_topic": ["addition", "subtraction", "multiplication", "fractions", "telling time"],
+        "vocabulary_word": ["beautiful", "because", "different", "favorite", "together"],
+        "historical_figure": ["Abraham Lincoln", "Martin Luther King Jr.", "Amelia Earhart", "George Washington", "Rosa Parks"]
+      }
+    },
+    {
+      "name": "middle_school_student",
+      "description": "A middle school student (grades 6-8) working on assignments",
+      "behavioral_patterns": [
+        "Asks more complex questions about academic subjects",
+        "May struggle with abstract concepts",
+        "Prefers step-by-step explanations",
+        "Sometimes lacks confidence in answers",
+        "May be easily distracted or frustrated"
+      ],
+      "tone_specifications": {
+        "formality": "casual",
+        "patience": "low",
+        "technical_level": "basic",
+        "emotion": "variable"
+      },
+      "scenario_templates": [
+        "Ask for help understanding {science_topic} for my science project",
+        "Request an explanation of {math_concept} with examples",
+        "Ask about the main themes in {literature_work}",
+        "Request help with my {history_topic} essay",
+        "Ask how to structure my presentation about {research_topic}"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.3,
+        "relevance": 0.3,
+        "completion": 0.2,
+        "safety": 0.2
+      },
+      "template_parameters": {
+        "science_topic": ["cell structure", "simple machines", "ecosystems", "states of matter", "plate tectonics"],
+        "math_concept": ["algebraic expressions", "proportional relationships", "geometric formulas", "statistical analysis", "linear equations"],
+        "literature_work": ["The Giver", "A Wrinkle in Time", "The Outsiders", "Percy Jackson series", "Wonder"],
+        "history_topic": ["Ancient Egypt", "American Revolution", "Civil Rights Movement", "World War II", "Medieval Europe"],
+        "research_topic": ["renewable energy", "ancient civilizations", "endangered species", "space exploration", "technology impact"]
+      }
+    },
+    {
+      "name": "high_school_student",
+      "description": "A high school student (grades 9-12) preparing for college",
+      "behavioral_patterns": [
+        "Asks detailed questions about complex topics",
+        "Concerned about grades and academic performance",
+        "May be preparing for standardized tests",
+        "Interested in practical applications of knowledge",
+        "May challenge information or ask for sources"
+      ],
+      "tone_specifications": {
+        "formality": "semi-formal",
+        "patience": "moderate",
+        "technical_level": "intermediate",
+        "emotion": "focused"
+      },
+      "scenario_templates": [
+        "Ask for help analyzing {literature_work} for my English essay",
+        "Request an explanation of {advanced_math} concepts for my calculus exam",
+        "Ask about experimental design for my {science_experiment}",
+        "Request help understanding {historical_event} and its significance",
+        "Ask for tips on writing my college application essay about {essay_topic}"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.4,
+        "relevance": 0.3,
+        "completion": 0.2,
+        "safety": 0.1
+      },
+      "template_parameters": {
+        "literature_work": ["To Kill a Mockingbird", "The Great Gatsby", "Macbeth", "1984", "The Catcher in the Rye"],
+        "advanced_math": ["derivatives", "integrals", "vector calculus", "probability distributions", "trigonometric functions"],
+        "science_experiment": ["enzyme catalysis", "projectile motion", "bacterial growth", "electrochemistry", "genetic crosses"],
+        "historical_event": ["Cold War", "Industrial Revolution", "French Revolution", "Civil Rights Movement", "Great Depression"],
+        "essay_topic": ["personal growth", "overcoming challenges", "community service", "academic interests", "cultural identity"]
+      }
+    }
+  ],
+  "api_settings": {
+    "deepseek_endpoint": "https://api.deepseek.com/v1",
+    "timeout_seconds": 30,
+    "retry_attempts": 3,
+    "rate_limit_per_minute": 60
+  },
+  "logging_settings": {
+    "output_directory": "test_results/education",
+    "log_level": "INFO",
+    "include_metadata": true
+  },
+  "performance_settings": {
+    "max_concurrent_requests": 10,
+    "memory_limit_gb": 2,
+    "cache_enabled": true
+  }
+}

@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepdeliberate"
+version = "0.1.0"
+description = "Lightweight AI agent testing framework"
+readme = "README.md"
+authors = [
+    {name = "DeepDeliberate Team"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+]
+requires-python = ">=3.13.3"
+dependencies = [
+    # Core framework dependencies
+    "pydantic>=2.4.0",
+    "pydantic-settings>=2.0.0", 
+    "pydantic-ai>=0.1.0",
+    "click>=8.0.0",
+    "python-dotenv>=1.0.0",
+    
+    # Azure AI Inference SDK for DeepSeek R1 integration
+    "azure-ai-inference>=1.0.0b1",
+    "azure-core>=1.29.0",
+    
+    # HTTP clients for async operations
+    "httpx>=0.25.1",
+    
+    # Retry and resilience
+    "tenacity>=8.0.0",
+    
+    # Async file operations
+    "aiofiles>=23.0.0",
+    "aiocsv>=1.3.0",
+    
+    # Data processing and analysis
+    "pandas>=2.0.0",
+    "tiktoken>=0.5.0",
+    
+    # System monitoring
+    "psutil>=5.9.0",
+    
+    # Future MCP Integration (Post-MVP)
+    # When implementing grounded query generation:
+    # "mcp>=1.0.0",  # Model Context Protocol client
+    # "firecrawl-py>=0.1.0",  # Web scraping MCP server
+    # "praw>=7.0.0",  # Reddit API for social media integration
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.10.0",
+]
+security = [
+    "bandit>=1.7.5",
+    "safety>=2.3.0",
+]
+
+[project.scripts]
+deepdeliberate = "deepdeliberate.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/deepdeliberate/deepdeliberate"
+Repository = "https://github.com/deepdeliberate/deepdeliberate"
+Issues = "https://github.com/deepdeliberate/deepdeliberate/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["deepdeliberate*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py313']
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

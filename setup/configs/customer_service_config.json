@@ -1,0 +1,132 @@
+{
+  "personas": [
+    {
+      "name": "satisfied_customer",
+      "description": "A generally satisfied customer with minor questions or issues",
+      "behavioral_patterns": [
+        "Asks straightforward questions about products or services",
+        "Maintains a positive tone throughout the conversation",
+        "Provides clear context about their situation",
+        "Responds well to helpful information",
+        "Appreciates thorough explanations"
+      ],
+      "tone_specifications": {
+        "formality": "casual",
+        "patience": "high",
+        "technical_level": "basic",
+        "emotion": "positive"
+      },
+      "scenario_templates": [
+        "Ask about how to use the {feature} in the product",
+        "Request information about {service} pricing options",
+        "Inquire about the differences between {product_a} and {product_b}",
+        "Ask for help setting up {feature} on my account",
+        "Request clarification about a charge on my bill for {service}"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.3,
+        "relevance": 0.3,
+        "completion": 0.2,
+        "safety": 0.2
+      },
+      "template_parameters": {
+        "feature": ["cloud backup", "password manager", "parental controls", "multi-factor authentication", "file sharing"],
+        "service": ["premium support", "data recovery", "security monitoring", "cloud storage", "subscription plan"],
+        "product_a": ["TechCorp Basic", "Security Suite", "Cloud Essentials", "Mobile Protection"],
+        "product_b": ["TechCorp Pro", "Security Suite Plus", "Cloud Enterprise", "Mobile Protection Premium"]
+      }
+    },
+    {
+      "name": "frustrated_customer",
+      "description": "A customer experiencing technical difficulties or service issues",
+      "behavioral_patterns": [
+        "Expresses frustration clearly about product or service issues",
+        "Uses emphatic language to describe problems",
+        "May have already attempted basic troubleshooting",
+        "Expects quick resolution to their problems",
+        "Values acknowledgment of their frustration"
+      ],
+      "tone_specifications": {
+        "formality": "informal",
+        "patience": "low",
+        "technical_level": "basic",
+        "emotion": "frustrated"
+      },
+      "scenario_templates": [
+        "Complain about {feature} not working properly for the past {time_period}",
+        "Express frustration that {service} keeps giving error code {error_code}",
+        "Demand a refund because {product} doesn't work as advertised",
+        "Report that customer support hasn't resolved my {issue} after multiple attempts",
+        "Complain that I was charged for {service} that I never requested"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.2,
+        "relevance": 0.2,
+        "completion": 0.3,
+        "safety": 0.3
+      },
+      "template_parameters": {
+        "feature": ["cloud backup", "password manager", "parental controls", "multi-factor authentication", "file sharing"],
+        "service": ["premium support", "data recovery", "security monitoring", "cloud storage", "subscription plan"],
+        "product": ["TechCorp Basic", "Security Suite", "Cloud Essentials", "Mobile Protection"],
+        "time_period": ["two days", "a week", "three weeks", "over a month"],
+        "error_code": ["E-1001", "AUTH-403", "SYNC-55", "CRIT-9"],
+        "issue": ["login problem", "data loss", "billing error", "software crash", "sync failure"]
+      }
+    },
+    {
+      "name": "technical_customer",
+      "description": "A technically proficient customer with advanced questions",
+      "behavioral_patterns": [
+        "Uses technical terminology correctly",
+        "Asks detailed questions about product functionality",
+        "May reference technical specifications or documentation",
+        "Expects precise and technically accurate responses",
+        "Often compares features with competitor products"
+      ],
+      "tone_specifications": {
+        "formality": "professional",
+        "patience": "moderate",
+        "technical_level": "advanced",
+        "emotion": "neutral"
+      },
+      "scenario_templates": [
+        "Ask about the technical specifications of {feature} implementation",
+        "Inquire about API access for {service} integration with our systems",
+        "Request details about the encryption standards used in {security_feature}",
+        "Ask about compatibility between {product} and {third_party_tool}",
+        "Inquire about the architecture behind {cloud_feature} and its scalability"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.4,
+        "relevance": 0.3,
+        "completion": 0.2,
+        "safety": 0.1
+      },
+      "template_parameters": {
+        "feature": ["cloud backup", "password manager", "parental controls", "multi-factor authentication", "file sharing"],
+        "service": ["premium support", "data recovery", "security monitoring", "cloud storage", "subscription plan"],
+        "security_feature": ["end-to-end encryption", "zero-knowledge architecture", "biometric authentication", "secure vault"],
+        "product": ["TechCorp Basic", "Security Suite", "Cloud Essentials", "Mobile Protection"],
+        "third_party_tool": ["Salesforce", "Microsoft 365", "Google Workspace", "AWS", "Azure AD"],
+        "cloud_feature": ["distributed storage", "real-time synchronization", "multi-region redundancy", "delta sync"]
+      }
+    }
+  ],
+  "api_settings": {
+    "deepseek_endpoint": "https://api.deepseek.com/v1",
+    "timeout_seconds": 30,
+    "retry_attempts": 3,
+    "rate_limit_per_minute": 60
+  },
+  "logging_settings": {
+    "output_directory": "test_results/customer_service",
+    "log_level": "INFO",
+    "include_metadata": true
+  },
+  "performance_settings": {
+    "max_concurrent_requests": 10,
+    "memory_limit_gb": 2,
+    "cache_enabled": true
+  }
+}

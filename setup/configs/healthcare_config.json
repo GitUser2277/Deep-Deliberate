@@ -1,0 +1,135 @@
+{
+  "personas": [
+    {
+      "name": "general_health_inquirer",
+      "description": "A person seeking general health information",
+      "behavioral_patterns": [
+        "Asks broad questions about health topics",
+        "Seeks educational information rather than diagnosis",
+        "Interested in preventive health measures",
+        "May ask about general wellness guidelines",
+        "Curious about health research and trends"
+      ],
+      "tone_specifications": {
+        "formality": "casual",
+        "patience": "high",
+        "technical_level": "basic",
+        "emotion": "curious"
+      },
+      "scenario_templates": [
+        "Ask about the benefits of {healthy_habit}",
+        "Request information about {nutrient} and why it's important",
+        "Ask about recommended {health_screening} frequency",
+        "Inquire about the relationship between {condition} and {risk_factor}",
+        "Ask for tips to improve {wellness_area}"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.4,
+        "relevance": 0.2,
+        "completion": 0.2,
+        "safety": 0.2
+      },
+      "template_parameters": {
+        "healthy_habit": ["regular exercise", "adequate sleep", "staying hydrated", "meditation", "balanced diet"],
+        "nutrient": ["vitamin D", "omega-3 fatty acids", "fiber", "protein", "antioxidants"],
+        "health_screening": ["blood pressure checks", "cholesterol testing", "cancer screenings", "vision exams", "dental checkups"],
+        "condition": ["heart disease", "diabetes", "osteoporosis", "depression", "hypertension"],
+        "risk_factor": ["sedentary lifestyle", "poor diet", "stress", "smoking", "alcohol consumption"],
+        "wellness_area": ["sleep quality", "stress management", "immune function", "digestive health", "mental wellbeing"]
+      }
+    },
+    {
+      "name": "concerned_patient",
+      "description": "A person worried about specific symptoms or conditions",
+      "behavioral_patterns": [
+        "Describes specific symptoms with concern",
+        "May catastrophize or assume worst-case scenarios",
+        "Seeks reassurance and clear guidance",
+        "May have already researched symptoms online",
+        "Anxious about potential diagnoses"
+      ],
+      "tone_specifications": {
+        "formality": "casual",
+        "patience": "low",
+        "technical_level": "basic",
+        "emotion": "worried"
+      },
+      "scenario_templates": [
+        "I've been experiencing {symptom} for {time_period}. Should I be concerned?",
+        "My {body_part} has been {sensation} lately. What could this mean?",
+        "I'm worried because I read online that {symptom} could be a sign of {serious_condition}",
+        "Is it normal to have {symptom} after {activity}?",
+        "My {family_member} has {condition}. Am I at risk too?"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.3,
+        "relevance": 0.2,
+        "completion": 0.2,
+        "safety": 0.3
+      },
+      "template_parameters": {
+        "symptom": ["headaches", "fatigue", "shortness of breath", "joint pain", "dizziness"],
+        "time_period": ["a few days", "about a week", "several weeks", "a month", "on and off for months"],
+        "body_part": ["back", "chest", "stomach", "head", "joints"],
+        "sensation": ["aching", "tingling", "burning", "throbbing", "numb"],
+        "serious_condition": ["cancer", "heart disease", "autoimmune disorder", "neurological condition", "chronic illness"],
+        "activity": ["exercise", "eating certain foods", "taking medication", "sleeping", "stress"],
+        "family_member": ["parent", "sibling", "grandparent", "aunt", "uncle"],
+        "condition": ["diabetes", "heart disease", "cancer", "high blood pressure", "depression"]
+      }
+    },
+    {
+      "name": "chronic_condition_manager",
+      "description": "A person managing a chronic health condition",
+      "behavioral_patterns": [
+        "Asks specific questions about condition management",
+        "Knowledgeable about their condition's basics",
+        "Interested in latest research and treatments",
+        "May discuss medication effects and interactions",
+        "Concerned about quality of life improvements"
+      ],
+      "tone_specifications": {
+        "formality": "semi-formal",
+        "patience": "moderate",
+        "technical_level": "intermediate",
+        "emotion": "determined"
+      },
+      "scenario_templates": [
+        "Ask about managing {symptom} associated with my {chronic_condition}",
+        "Inquire about potential interactions between {medication} and {other_medication}",
+        "Request information about new treatments for {chronic_condition}",
+        "Ask about lifestyle modifications to help manage {chronic_condition}",
+        "Inquire about {complementary_approach} for {chronic_condition} management"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.4,
+        "relevance": 0.3,
+        "completion": 0.2,
+        "safety": 0.1
+      },
+      "template_parameters": {
+        "symptom": ["pain", "fatigue", "inflammation", "mobility issues", "sleep disturbances"],
+        "chronic_condition": ["diabetes", "arthritis", "asthma", "hypertension", "multiple sclerosis"],
+        "medication": ["metformin", "prednisone", "levothyroxine", "lisinopril", "atorvastatin"],
+        "other_medication": ["aspirin", "ibuprofen", "supplements", "antihistamines", "antibiotics"],
+        "complementary_approach": ["dietary changes", "exercise regimens", "stress reduction techniques", "acupuncture", "meditation"]
+      }
+    }
+  ],
+  "api_settings": {
+    "deepseek_endpoint": "https://api.deepseek.com/v1",
+    "timeout_seconds": 30,
+    "retry_attempts": 3,
+    "rate_limit_per_minute": 60
+  },
+  "logging_settings": {
+    "output_directory": "test_results/healthcare",
+    "log_level": "INFO",
+    "include_metadata": true
+  },
+  "performance_settings": {
+    "max_concurrent_requests": 10,
+    "memory_limit_gb": 2,
+    "cache_enabled": true
+  }
+}

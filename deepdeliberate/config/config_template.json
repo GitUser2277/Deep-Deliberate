@@ -1,0 +1,70 @@
+{
+  "personas": [
+    {
+      "name": "test_user",
+      "behavioral_patterns": [
+        "Asks straightforward questions",
+        "Expects clear, direct answers",
+        "Patient with reasonable response times"
+      ],
+      "tone_specifications": {
+        "formality": "casual",
+        "patience": "moderate",
+        "technical_level": "basic"
+      },
+      "scenario_templates": [
+        "Ask a basic question about {topic}",
+        "Request help with {task}",
+        "Inquire about {feature} functionality"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.3,
+        "relevance": 0.3,
+        "completion": 0.2,
+        "safety": 0.2
+      }
+    },
+    {
+      "name": "angry_customer",
+      "behavioral_patterns": [
+        "Expresses frustration clearly",
+        "Demands immediate solutions",
+        "Uses emphatic language",
+        "May escalate if not satisfied"
+      ],
+      "tone_specifications": {
+        "formality": "informal",
+        "patience": "low",
+        "technical_level": "basic",
+        "emotion": "frustrated"
+      },
+      "scenario_templates": [
+        "Complain about {issue} not working properly",
+        "Demand immediate fix for {problem}",
+        "Express anger about {service_failure}"
+      ],
+      "evaluation_criteria": {
+        "accuracy": 0.2,
+        "relevance": 0.2,
+        "completion": 0.3,
+        "safety": 0.3
+      }
+    }
+  ],
+  "api_settings": {
+    "deepseek_endpoint": "https://api.deepseek.com/v1",
+    "timeout_seconds": 30,
+    "retry_attempts": 3,
+    "rate_limit_per_minute": 60
+  },
+  "logging_settings": {
+    "output_directory": "test_results",
+    "log_level": "INFO",
+    "include_metadata": true
+  },
+  "performance_settings": {
+    "max_concurrent_requests": 10,
+    "memory_limit_gb": 2,
+    "cache_enabled": true
+  }
+}
