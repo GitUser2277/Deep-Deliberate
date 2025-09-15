@@ -122,10 +122,7 @@ def display_model_configuration(enhanced_eval: bool = False):
 )
 @click.option(
     "-mode", "--mode",
-    type=click.Choice(
-        [ExecutionMode.AUTO, ExecutionMode.APPROVE],
-        case_sensitive=False,
-    ),
+    type=click.Choice([e.value for e in ExecutionMode], case_sensitive=False),
     required=True,
     help="Execution mode: auto (fully automated) or approve (step-by-step)"
 )

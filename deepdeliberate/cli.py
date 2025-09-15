@@ -1,15 +1,81 @@
 """
 Command-line interface for DeepDeliberate framework.
 
-This module provides the main CLI entry point for the framework,
-handling argument parsing and user interaction.
+This CLI mirrors the behavior of the top-level deepdeliberate.py script
+so users can either run `python deepdeliberate.py` or the installed
+`deepdeliberate` command with the same options and behavior.
 """
 
-import click
 from pathlib import Path
-from typing import Optional
+import os
+import sys
+import asyncio
+import click
 
-from .core.models import CLIConfig, ExecutionMode, UserDecision
+from .core.models import CLIConfig, ExecutionMode
+from .config.manager import load_config
+from .core.agent_executor_interface import FrameworkAgentExecutor
+from .core.deepseek_client import DeepSeekConfig
+from .core.evaluator import DeepSeekEvaluator
+from .core.enhanced_evaluator import EnhancedDeepSeekEvaluator
+from .core.framework_core import FrameworkCore
+from .core.query_generator import DeepSeekQueryGenerator
+from .core.session_logger import SessionLogger
+
+
+def _setup_environment() -> None:
+    """Configure console encoding (Windows) and load environment variables."""
+    # Fix Windows console encoding issues
+    if sys.platform.startswith("win"):
+        try:
+            import codecs
+
+            sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, "strict")
+            sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, "strict")
+        except Exception:
+            pass
+
+    # Load environment variables from project `.env` if present
+    try:
+        from dotenv import load_dotenv
+        project_root = Path(__file__).resolve().parent.parent
+        env_path = project_root / ".env"
+        if env_path.exists():
+            load_dotenv(env_path)
+            click.echo(f"Loaded environment variables from: {env_path}")
+        else:
+            click.echo(f"Environment file not found at: {env_path}")
+            click.echo("   Create a .env file with your API keys and configuration")
+    except Exception:
+        # dotenv is already a dependency; ignore if anything odd happens
+        pass
+
+
+def display_model_configuration(enhanced_eval: bool = False) -> None:
+    """Display model and environment config status for transparency."""
+    click.echo("\n📋 Model Configuration:")
+    click.echo("   • Query Generation: DeepSeek R1 (Azure AI Inference)")
+    click.echo("   • Agent Execution: Azure OpenAI o4-mini (your agent)")
+    if enhanced_eval:
+        click.echo("   • Response Evaluation: DeepSeek R1 Enhanced (5-dim)")
+    else:
+        click.echo("   • Response Evaluation: DeepSeek R1 Standard (4-dim)")
+
+    click.echo("\n🔑 Environment Configuration:")
+    deepseek_key = "✅ Set" if os.getenv("DEEPSEEK_API_KEY") else "❌ Missing"
+    azure_key = "✅ Set" if os.getenv("AZURE_OPENAI_API_KEY") else "❌ Missing"
+    azure_endpoint = "✅ Set" if os.getenv("AZURE_OPENAI_ENDPOINT") else "❌ Missing"
+    azure_api_version = "✅ Set" if os.getenv("AZURE_OPENAI_API_VERSION") else "❌ Missing"
+    azure_deployment = "✅ Set" if os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME") else "❌ Missing"
+
+    click.echo(f"   • DEEPSEEK_API_KEY: {deepseek_key}")
+    click.echo(f"   • AZURE_OPENAI_API_KEY: {azure_key}")
+    click.echo(f"   • AZURE_OPENAI_ENDPOINT: {azure_endpoint}")
+    click.echo(f"   • AZURE_OPENAI_API_VERSION: {azure_api_version}")
+    click.echo(f"   • AZURE_OPENAI_DEPLOYMENT_NAME: {azure_deployment}")
+
+    rate_limit = os.getenv("API_RATE_LIMIT_PER_MINUTE", "60")
+    click.echo(f"   • API_RATE_LIMIT_PER_MINUTE: {rate_limit}")
 
 
 @click.command()
@@ -21,7 +87,7 @@ from .core.models import CLIConfig, ExecutionMode, UserDecision
 )
 @click.option(
     "-mode", "--mode",
-    type=click.Choice([ExecutionMode.AUTO, ExecutionMode.APPROVE], case_sensitive=False),
+    type=click.Choice([e.value for e in ExecutionMode], case_sensitive=False),
     required=True,
     help="Execution mode: auto (fully automated) or approve (step-by-step)"
 )
@@ -45,112 +111,128 @@ from .core.models import CLIConfig, ExecutionMode, UserDecision
     "-config", "--config",
     default="config.json",
     type=click.Path(path_type=Path),
-    help="Configuration file path (default: config.json)"
+    help=(
+        "Configuration file path (default: config.json, or use "
+        "setup/configs/customer_service_config.json)"
+    )
+)
+@click.option(
+    "-enhanced", "--enhanced",
+    is_flag=True,
+    default=False,
+    help="Use enhanced 5-dimension evaluator for comprehensive analysis"
 )
 def main(
     agent_file: Path,
-    mode: ExecutionMode,
+    mode: str,
     count: int,
-    persona: Optional[str],
-    output: Optional[Path],
-    config: Path
+    persona: str,
+    output: Path,
+    config: Path,
+    enhanced: bool
 ) -> None:
-    """
-    DeepDeliberate - AI Agent Testing Framework
-    
-    Test your PydanticAI agents with automated query generation and evaluation.
-    
-    Examples:
-        deepdeliberate -file src/agent.py -mode auto -count 25
-        deepdeliberate -file src/agent.py -mode approve -persona angry_customer
-    """
-    # Create CLI configuration
+    """DeepDeliberate - AI Agent Testing Framework."""
+    _setup_environment()
+
+    click.echo("DeepDeliberate Framework v1.0")
+    click.echo("AI Agent Testing with Automated Query Generation")
+
+    click.echo("\nConfiguration:")
+    click.echo(f"  Agent File: {agent_file}")
+    click.echo(f"  Mode: {mode}")
+    click.echo(f"  Count: {count}")
+    click.echo(f"  Persona: {persona}")
+    click.echo(f"  Config: {config}")
+    click.echo(f"  Enhanced Evaluator: {'Yes' if enhanced else 'No'}")
+
+    display_model_configuration(enhanced)
+
     cli_config = CLIConfig(
         agent_file=str(agent_file),
-        mode=mode,
+        mode=mode,  # Pydantic will coerce to ExecutionMode
         count=count,
         persona=persona,
         output_dir=str(output) if output else None,
-        config_file=str(config)
+        config_file=str(config),
+        enhanced_evaluator=enhanced
     )
-    
-    click.echo(">> Starting DeepDeliberate framework...")
-    click.echo(f"   Agent file: {cli_config.agent_file}")
-    click.echo(f"   Mode: {cli_config.mode}")
-    click.echo(f"   Count: {cli_config.count}")
-    
-    if cli_config.persona:
-        click.echo(f"   Persona: {cli_config.persona}")
-    
-    if cli_config.output_dir:
-        click.echo(f"   Output: {cli_config.output_dir}")
-    
-    # Import and run framework core with proper async handling
+
     try:
-        import asyncio
-        from .core.framework_core import FrameworkCore
-        
-        # Run the async framework
-        asyncio.run(run_framework_async(cli_config))
-        
-    except ImportError as e:
-        click.echo(f"   Framework core not yet fully integrated: {e}")
-        click.echo("   This will be completed when all components are implemented")
+        asyncio.run(run_framework_async(cli_config, enhanced))
+    except KeyboardInterrupt:
+        click.echo("\n⚠️  Framework interrupted by user")
+    except Exception as e:
+        click.echo(f"\n❌ Framework error: {e}")
+        raise
 
 
-async def run_framework_async(cli_config: CLIConfig) -> None:
+async def run_framework_async(cli_config: CLIConfig, enhanced: bool) -> None:
     """Run the framework with proper async handling."""
-    from .core.framework_core import FrameworkCore
-    from .core.query_generator import DeepSeekQueryGenerator
-    from .core.evaluator import DeepSeekEvaluator
-    from .core.agent_executor_interface import FrameworkAgentExecutor
-    from .core.session_logger import SessionLogger
-    from .config.manager import load_config
-    
-    # Load configuration
-    config = load_config(cli_config.config_file)
-    
-    # Create framework components
-    query_generator = DeepSeekQueryGenerator()
+    click.echo("\n🚀 Starting DeepDeliberate Framework")
+    click.echo("=" * 50)
+
+    click.echo("⚙️  Loading configuration...")
+    config_path = Path(cli_config.config_file)
+    if not config_path.is_absolute():
+        config_path = Path.cwd() / config_path
+    if not config_path.exists():
+        click.echo(f"❌ Configuration file not found: {config_path}")
+        click.echo("   Available config files:")
+        click.echo("   • config.json (root directory)")
+        click.echo("   • setup/configs/customer_service_config.json")
+        click.echo("   • setup/configs/education_config.json")
+        click.echo("   • setup/configs/healthcare_config.json")
+        raise ValueError(f"Configuration file not found: {config_path}")
+    click.echo(f"   Loading from: {config_path}")
+    config = load_config(str(config_path))
+
+    deepseek_config = DeepSeekConfig.from_environment()
+
+    click.echo("📦 Creating framework components...")
+    query_generator = DeepSeekQueryGenerator(deepseek_config)
     agent_executor = FrameworkAgentExecutor()
-    evaluator = DeepSeekEvaluator()
-    session_logger = SessionLogger()
-    
-    # Create and run framework
-    async with FrameworkCore(
+    if enhanced:
+        click.echo("   • Creating Enhanced DeepSeek Evaluator (5-dimension analysis)...")
+        evaluator = EnhancedDeepSeekEvaluator(deepseek_config)
+    else:
+        click.echo("   • Creating Standard DeepSeek Evaluator (4-dimension analysis)...")
+        evaluator = DeepSeekEvaluator(deepseek_config)
+
+    session_logger = SessionLogger(config.logging_settings.output_directory)
+
+    click.echo("🔧 Initializing framework...")
+    framework = FrameworkCore(
         query_generator=query_generator,
         agent_executor=agent_executor,
         evaluator=evaluator,
         session_logger=session_logger
-    ) as framework:
-        await framework.initialize(config)
-        result = await framework.run_testing_session(cli_config)
-        click.echo(f"✅ Session completed with {len(result.completed_interactions)} interactions")
+    )
 
+    await framework.initialize(config)
+    await framework.initialize_agent_executor(cli_config.agent_file)
 
-def display_query_approval(query: str, persona: str) -> UserDecision:
-    """Display a query for user approval and get their decision."""
-    click.echo("\n" + "="*60)
-    click.echo(f"Persona: {persona}")
-    click.echo("Generated Query:")
-    click.echo("-" * 40)
-    click.echo(query)
-    click.echo("-" * 40)
-    
-    while True:
-        choice = click.prompt(
-            "Choose action",
-            type=click.Choice(['c', 'r', 'e']),
-            show_choices=True,
-            show_default=False
-        ).lower()
-        
-        if choice == 'c':
-            return UserDecision.CONTINUE
-        elif choice == 'r':
-            return UserDecision.RETRY
-        elif choice == 'e':
-            return UserDecision.EXIT
+    click.echo("✅ Framework initialized successfully")
+    click.echo("🤖 Discovering and loading agents...")
+
+    click.echo("🎯 Starting new testing session...")
+    result = await framework.run_testing_session(cli_config)
+
+    successful = (
+        [i for i in result.completed_interactions if not i.agent_response.startswith("ERROR")]
+        if result.completed_interactions else []
+    )
+    avg_score = (
+        sum(i.evaluation_score for i in successful) / len(successful)
+        if successful else None
+    )
+
+    from .core.deepseek_display import get_display_renderer
+    renderer = get_display_renderer()
+    renderer.display_session_summary(
+        total_interactions=len(result.completed_interactions),
+        successful_interactions=len(successful),
+        average_score=avg_score
+    )
 
 
 if __name__ == "__main__":

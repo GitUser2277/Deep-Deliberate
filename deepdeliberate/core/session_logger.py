@@ -68,8 +68,9 @@ class SessionLogger(SessionLoggerInterface):
             >>> logger = SessionLogger()
             >>> await logger.initialize_session("test_session_123")
         """
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        base_name = f"session_{session_id}_{timestamp}"
+        # Use the provided session_id directly for filenames to avoid duplication
+        # The session_id already contains a timestamp and a unique suffix
+        base_name = session_id
         
         self.interactions_file = self.output_directory / f"{base_name}_interactions.csv"
         self.decisions_file = self.output_directory / f"{base_name}_decisions.csv"
@@ -245,7 +246,7 @@ class SessionLogger(SessionLoggerInterface):
             }
             
             # Write session summary to separate file with proper async handling
-            summary_file = self.output_directory / f"session_{session_state.session_id}_summary.json"
+            summary_file = self.output_directory / f"{session_state.session_id}_summary.json"
             async with aiofiles.open(summary_file, 'w', encoding='utf-8') as f:
                 await f.write(json.dumps(summary, indent=2, default=str))
             

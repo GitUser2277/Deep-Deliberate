@@ -76,13 +76,16 @@ security = [
 deepdeliberate = "deepdeliberate.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/deepdeliberate/deepdeliberate"
-Repository = "https://github.com/deepdeliberate/deepdeliberate"
-Issues = "https://github.com/deepdeliberate/deepdeliberate/issues"
+Homepage = "https://github.com/Deep-Deliberate/Deep-Deliberate"
+Repository = "https://github.com/Deep-Deliberate/Deep-Deliberate"
+Issues = "https://github.com/Deep-Deliberate/Deep-Deliberate/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["deepdeliberate*"]
+
+[tool.setuptools]
+license-files = ["LICENSE"]
 
 [tool.black]
 line-length = 88
