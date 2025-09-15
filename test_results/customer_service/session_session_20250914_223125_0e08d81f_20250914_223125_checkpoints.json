@@ -1,0 +1,89 @@
+[
+  {
+    "checkpoint_id": "checkpoint_20250914_223125",
+    "timestamp": "2025-09-14T22:31:25.733765",
+    "session_id": "session_20250914_223125_0e08d81f",
+    "current_iteration": 0,
+    "total_iterations": 1,
+    "mode": "auto",
+    "persona_name": "frustrated_customer",
+    "completed_interactions_count": 0,
+    "checkpoint_data": {
+      "initialization_time": "2025-09-14T22:31:25.732266",
+      "framework_state": "session_active",
+      "resource_status": {
+        "connection_pool": true,
+        "response_cache": true,
+        "request_semaphore": true,
+        "active_tasks": 0
+      }
+    }
+  },
+  {
+    "checkpoint_id": "checkpoint_20250914_223300",
+    "timestamp": "2025-09-14T22:33:00.672172",
+    "session_id": "session_20250914_223125_0e08d81f",
+    "current_iteration": 1,
+    "total_iterations": 1,
+    "mode": "auto",
+    "persona_name": "frustrated_customer",
+    "completed_interactions_count": 1,
+    "checkpoint_data": {
+      "initialization_time": "2025-09-14T22:31:25.732266",
+      "framework_state": "session_active",
+      "resource_status": {
+        "connection_pool": true,
+        "response_cache": true,
+        "request_semaphore": true,
+        "active_tasks": 0
+      },
+      "last_resource_check": {
+        "timestamp": "2025-09-14T22:33:00.664301",
+        "memory_usage_percent": 81.6
+      },
+      "final_statistics": {
+        "session_id": "session_20250914_223125_0e08d81f",
+        "execution_time": 94.937925,
+        "total_interactions": 1,
+        "successful_interactions": 1,
+        "average_score": 1.0,
+        "mode": "auto",
+        "persona": "frustrated_customer"
+      }
+    }
+  },
+  {
+    "checkpoint_id": "checkpoint_20250914_223300",
+    "timestamp": "2025-09-14T22:33:00.674599",
+    "session_id": "session_20250914_223125_0e08d81f",
+    "current_iteration": 1,
+    "total_iterations": 1,
+    "mode": "auto",
+    "persona_name": "frustrated_customer",
+    "completed_interactions_count": 1,
+    "checkpoint_data": {
+      "initialization_time": "2025-09-14T22:31:25.732266",
+      "framework_state": "session_active",
+      "resource_status": {
+        "connection_pool": true,
+        "response_cache": true,
+        "request_semaphore": true,
+        "active_tasks": 0
+      },
+      "last_resource_check": {
+        "timestamp": "2025-09-14T22:33:00.664301",
+        "memory_usage_percent": 81.6
+      },
+      "final_statistics": {
+        "session_id": "session_20250914_223125_0e08d81f",
+        "execution_time": 94.937925,
+        "total_interactions": 1,
+        "successful_interactions": 1,
+        "average_score": 1.0,
+        "mode": "auto",
+        "persona": "frustrated_customer"
+      },
+      "completion_time": "2025-09-14T22:33:00.674582"
+    }
+  }
+]
